@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;  
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,9 +11,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import com.example.demo.model.Task;
 import com.example.demo.service.TaskService;
+import com.example.demo.dto.TaskMapper;
+import com.example.demo.dto.TaskRequest;
+import com.example.demo.dto.TaskResponse;
 
 @RestController
 @RequestMapping("/tasks")
@@ -20,34 +26,48 @@ public class TaskController {
 
     private final TaskService service;
 
-    public TaskController(TaskService service) {
+    private final TaskMapper mapper;
+
+    public TaskController(TaskService service, TaskMapper mapper) {
         this.service = service;
+        this.mapper = mapper;
     }
 
     @PostMapping
-    public Task criar(@RequestParam Long id,
-                      @RequestParam String titulo,
-                      @RequestParam String descricao) {
-        return service.criarTarefa(id, titulo, descricao);
+    public ResponseEntity<TaskResponse> criar(@Valid @RequestBody TaskRequest request) {
+        Long tempId = System.currentTimeMillis(); // ID temporário
+        Task task = service.criarTarefa(tempId, request.getTitulo(), request.getDescricao());
+        TaskResponse response = mapper.toResponse(task);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);    
     }
 
     @GetMapping
-    public List<Task> listar() {
-        return service.listarTarefas();
+    public ResponseEntity<List<TaskResponse>> listar() {
+        List<Task> tasks = service.listarTarefas();
+        List<TaskResponse> response = tasks.stream()
+            .map(mapper::toResponse) // chama mapper.toResponse para cada task
+            .collect(Collectors.toList());
+
+        return ResponseEntity.ok(response);    
     }
 
     @GetMapping("/{id}")
-    public Task buscar(@PathVariable Long id) {
-        return service.buscarTarefaPorId(id);
+    public ResponseEntity<TaskResponse> buscar(@PathVariable Long id) {
+        Task task = service.buscarTarefaPorId(id);
+        TaskResponse response = mapper.toResponse(task);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}/concluir")
-    public Task concluir(@PathVariable Long id) {
-        return service.concluirTarefa(id);
+    public ResponseEntity<TaskResponse> concluir(@PathVariable Long id) {
+        Task task = service.concluirTarefa(id);
+        TaskResponse response = mapper.toResponse(task);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-        public void excluir(@PathVariable Long id) {
+        public ResponseEntity<Void> excluir(@PathVariable Long id) {
             service.excluirTarefa(id);
+            return ResponseEntity.noContent().build();
         }
     }
