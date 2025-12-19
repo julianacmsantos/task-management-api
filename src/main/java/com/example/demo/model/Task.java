@@ -47,17 +47,12 @@ public class Task {
         return status;
     }
 
-    public void setStatus(TaskStatus status) {
+    public void setStatus(com.example.demo.model.TaskStatus status) {
         this.status = status;
     }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
-    }
-
-    public enum TaskStatus {
-        PENDING,
-        DONE
     }
 
 }

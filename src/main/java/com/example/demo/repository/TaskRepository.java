@@ -2,7 +2,9 @@ package com.example.demo.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.stereotype.Repository;
+
 import com.example.demo.model.Task;
 
 @Repository
@@ -16,7 +18,7 @@ public class TaskRepository {
     }
 
     public List<Task> findAll() {
-        return taks;
+        return tasks;
     }
 
     public Task findById(Long id) {
