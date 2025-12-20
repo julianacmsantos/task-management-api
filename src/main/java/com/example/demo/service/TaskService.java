@@ -1,7 +1,10 @@
 package com.example.demo.service;
 
 import java.util.List;
+
 import org.springframework.stereotype.Service;
+
+import com.example.demo.exception.TaskNotFoundException;
 import com.example.demo.model.Task;
 import com.example.demo.model.TaskStatus;
 import com.example.demo.repository.TaskRepository;
@@ -27,7 +30,7 @@ public class TaskService {
     public Task buscarTarefaPorId(Long id) {
         Task task = repository.findById(id);
         if (task == null) {
-            throw new RuntimeException("Tarefa não encontrada");
+            throw new TaskNotFoundException(id);
         }
         return task;
     }
