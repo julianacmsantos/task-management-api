@@ -37,10 +37,9 @@ public class TaskController {
 
     @PostMapping
     public ResponseEntity<TaskResponse> criar(@Valid @RequestBody TaskRequest request) {
-        Long tempId = System.currentTimeMillis(); // ID temporário
-        Task task = service.criarTarefa(tempId, request.getTitulo(), request.getDescricao());
+        Task task = service.criarTarefa(request.getTitulo(), request.getDescricao());
         TaskResponse response = mapper.toResponse(task);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);    
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping
