@@ -28,11 +28,8 @@ public class TaskService {
     }
 
     public Task buscarTarefaPorId(Long id) {
-        Task task = repository.findById(id);
-        if (task == null) {
-            throw new TaskNotFoundException(id);
-        }
-        return task;
+        return repository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
     }
 
     public Task concluirTarefa(Long id) {

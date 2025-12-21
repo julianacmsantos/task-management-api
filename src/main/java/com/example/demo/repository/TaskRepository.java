@@ -2,6 +2,7 @@ package com.example.demo.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
@@ -21,11 +22,10 @@ public class TaskRepository {
         return tasks;
     }
 
-    public Task findById(Long id) {
+    public Optional<Task> findById(Long id) {
         return tasks.stream()
                 .filter(t -> t.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
 
     public void delete(Task task) {
