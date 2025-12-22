@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.stereotype.Service;
 
@@ -14,15 +13,13 @@ import com.example.demo.repository.TaskRepository;
 public class TaskService {
 
     private final TaskRepository repository;
-    private final AtomicLong idGenerator = new AtomicLong(1);
 
     public TaskService(TaskRepository repository) {
         this.repository = repository;
     }
 
     public Task criarTarefa(String titulo, String descricao) {
-        Long novoId = idGenerator.getAndIncrement();
-        Task task = new Task(novoId, titulo, descricao);
+        Task task = new Task(titulo, descricao); // SEM ID
         return repository.save(task);
     }
 
@@ -38,12 +35,11 @@ public class TaskService {
     public Task concluirTarefa(Long id) {
         Task task = buscarTarefaPorId(id);
         task.setStatus(TaskStatus.DONE);
-        return task;
+        return repository.save(task); // importante
     }
 
     public void excluirTarefa(Long id) {
         Task task = buscarTarefaPorId(id);
         repository.delete(task);
     }
-
 }

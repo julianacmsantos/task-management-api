@@ -17,9 +17,4 @@ public class TaskMapper {
             task.getCreatedAt()
         );
     }
-
-    // Converte TaskRequest (dados do cliente) → Task (entidade interna)
-    public Task toEntity(TaskRequest request, Long id) {
-        return new Task(id, request.getTitulo(), request.getDescricao());
-    }
 }

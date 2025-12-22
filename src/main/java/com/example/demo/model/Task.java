@@ -24,10 +24,10 @@ public class Task {
 
     private LocalDateTime createdAt;
 
-    public Task() {}
+    protected Task() {
+    }
 
-    public Task(Long id, String titulo, String descricao) {
-        this.id = id;
+    public Task(String titulo, String descricao) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.status = TaskStatus.PENDING;
@@ -37,10 +37,6 @@ public class Task {
     // Getters and Setters
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getTitulo() {
@@ -63,7 +59,7 @@ public class Task {
         return status;
     }
 
-    public void setStatus(com.example.demo.model.TaskStatus status) {
+    public void setStatus(TaskStatus status) {
         this.status = status;
     }
 
