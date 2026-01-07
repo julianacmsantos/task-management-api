@@ -8,6 +8,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Task {
@@ -24,12 +26,17 @@ public class Task {
 
     private LocalDateTime createdAt;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User owner;
+
     protected Task() {
     }
 
-    public Task(String titulo, String descricao) {
+    public Task(String titulo, String descricao, User owner) {
         this.titulo = titulo;
         this.descricao = descricao;
+        this.owner = owner;
         this.status = TaskStatus.PENDING;
         this.createdAt = LocalDateTime.now();
     }
@@ -65,6 +72,14 @@ public class Task {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
 }
